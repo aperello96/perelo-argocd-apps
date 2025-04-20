@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-server-transmission-ingress
+  namespace: plex-server
+spec:
+  rules:
+  - host: "transmission.local.perelohome.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: transmission-service 
+            port:
+              number: 9091
+  tls:
+  - hosts:
+    - transmission.local.perelohome.com
+    secretName: plex-server-transmission-tls-secret

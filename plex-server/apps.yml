@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex-deployment
+  namespace: plex-server
+  labels:
+    app: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+        - name: plex
+          image: jaymoulin/plex:1.30.1.6562
+          ports:
+            - containerPort: 32400
+          volumeMounts:
+            - name: plex-config
+              mountPath: /config
+            - name: plex-data
+              mountPath: /data
+      volumes:
+        - name: plex-config
+          persistentVolumeClaim:
+            claimName: plex-pvc-config
+        - name: plex-data
+          persistentVolumeClaim:
+            claimName: plex-pvc-datatest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission-deployment
+  namespace: plex-server
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      containers:
+        - name: transmission
+          image: lscr.io/linuxserver/transmission:latest
+          command: ["transmission-daemon", "-f", "-g", "/config"]
+          ports:
+            - containerPort: 9091
+            - containerPort: 51413
+            - containerPort: 51413
+              protocol: UDP
+          volumeMounts:
+            - name: transmission-config
+              mountPath: /config
+            - name: transmission-downloads
+              mountPath: /downloads
+      volumes:
+        - name: transmission-config
+          persistentVolumeClaim:
+            claimName: transmission-pvc-config
+        - name: transmission-downloads
+          persistentVolumeClaim:
+            claimName: transmission-pvc-downloads

@@ -1,0 +1,13 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-server-transmission-cert
+  namespace: plex-server
+spec:
+  secretName: plex-server-transmission-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - transmission.local.perelohome.com

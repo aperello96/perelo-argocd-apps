@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-service
+  namespace: plex-server
+  labels:
+    app: plex
+spec:
+  type: LoadBalancer # Cambia a LoadBalancer si usas un proveedor de nube compatible
+  ports:
+    - port: 32400
+      targetPort: 32400
+      protocol: TCP
+      nodePort: 32400 # Opcional, especifica un puerto en el nodo
+  selector:
+    app: plex
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-service
+  namespace: plex-server
+  labels:
+    app: transmission
+spec:
+  type: ClusterIP
+  ports:
+    - name: web
+      port: 9091
+      targetPort: 9091
+      protocol: TCP
+    - name: torrent-tcp
+      port: 51413
+      targetPort: 51413
+      protocol: TCP
+    - name: torrent-udp
+      port: 51413
+      targetPort: 51413
+      protocol: UDP
+  selector:
+    app: transmission

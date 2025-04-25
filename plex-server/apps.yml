@@ -62,13 +62,14 @@ spec:
               protocol: UDP
           volumeMounts:
             - name: transmission-config
-              mountPath: /config
+              mountPath: /config/settings.json
+              subPath: settings.json
             - name: transmission-downloads
               mountPath: /downloads
       volumes:
         - name: transmission-config
-          persistentVolumeClaim:
-            claimName: transmission-pvc-config
+          configMap:
+            name: transmission-settings-configmap
         - name: transmission-downloads
           persistentVolumeClaim:
             claimName: transmission-pvc-downloads

@@ -40,3 +40,17 @@ spec:
       protocol: UDP
   selector:
     app: transmission
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent
+  namespace: plex-server
+spec:
+  selector:
+    app: qbittorrent
+    part-of: qbittorrent
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: qbittorrent

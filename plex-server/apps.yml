@@ -73,3 +73,69 @@ spec:
         - name: transmission-downloads
           persistentVolumeClaim:
             claimName: transmission-pvc-downloads
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: qbittorrent
+  namespace: plex-server
+  labels:
+    app: qbittorrent
+    part-of: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+      part-of: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+        part-of: qbittorrent
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      containers:
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:4.4.3
+        ports:
+        - name: qbittorrent
+          containerPort: 8080
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: UMASK
+          value: "022"
+        volumeMounts:
+        - name: qbittorrent
+          mountPath: /config
+        - name: downloads-movies
+          mountPath: /downloads/movies
+        - name: downloads-series
+          mountPath: /downloads/series
+        resources:
+          limits:
+            memory: 250Mi
+          requests:
+            memory: 200Mi
+      volumes:
+      - name: qbittorrent
+        persistentVolumeClaim:
+          claimName: qbittorrent
+      - name: downloads-series
+        persistentVolumeClaim:
+          claimName: downloads-series
+      - name: downloads-movies
+        persistentVolumeClaim:
+          claimName: downloads-movies

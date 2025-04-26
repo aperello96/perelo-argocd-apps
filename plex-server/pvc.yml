@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 0.1Gi
   storageClassName: longhorn
 ---
 apiVersion: v1
@@ -49,7 +49,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 200Gi
+      storage: 1500Gi
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -62,7 +62,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 200Gi
+      storage: 1500Gi
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1

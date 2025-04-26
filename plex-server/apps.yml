@@ -24,15 +24,20 @@ spec:
           volumeMounts:
             - name: plex-config
               mountPath: /config
-            - name: plex-data
-              mountPath: /data
+            - name: plex-series
+              mountPath: /series
+            - name: plex-movies
+              mountPath: /movies
       volumes:
         - name: plex-config
           persistentVolumeClaim:
             claimName: plex-pvc-config
-        - name: plex-data
+        - name: plex-series
           persistentVolumeClaim:
-            claimName: plex-pvc-datatest
+            claimName: downloads-series
+        - name: plex-movies
+          persistentVolumeClaim:
+            claimName: downloads-movies
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -80,25 +85,15 @@ spec:
         volumeMounts:
         - name: qbittorrent
           mountPath: /config
-        - name: downloads-movies
-          mountPath: /downloads/movies
-        - name: downloads-series
-          mountPath: /downloads/series
-        resources:
-          limits:
-            memory: 250Mi
-          requests:
-            memory: 200Mi
+        - name: downloads
+          mountPath: /downloads
       volumes:
       - name: qbittorrent
         persistentVolumeClaim:
           claimName: qbittorrent
-      - name: downloads-series
+      - name: downloads
         persistentVolumeClaim:
-          claimName: downloads-series
-      - name: downloads-movies
-        persistentVolumeClaim:
-          claimName: downloads-movies
+          claimName: downloads-torrents
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -122,15 +117,15 @@ spec:
           image: lscr.io/linuxserver/jackett:latest
           env:
             - name: PUID
-              value: "1000" # Cambia según el UID del usuario
+              value: "1000"
             - name: PGID
-              value: "1000" # Cambia según el GID del grupo
+              value: "1000"
             - name: TZ
               value: "Europe/Madrid"
             - name: AUTO_UPDATE
-              value: "true" # Opcional
+              value: "true"
             - name: RUN_OPTS
-              value: "" # Opcional
+              value: ""
           ports:
           - name: jackett
             containerPort: 9117
@@ -141,3 +136,99 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: jackett-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: plex-server
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - name: sonarr
+          image: lscr.io/linuxserver/sonarr:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Europe/Madrid"
+          ports:
+          - name: sonarr
+            containerPort: 8989
+          volumeMounts:
+            - name: sonarr-config
+              mountPath: /config
+            - name: tv-shows
+              mountPath: /tv
+            - name: downloads
+              mountPath: /downloads
+      volumes:
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: sonarr-config
+        - name: tv-shows
+          persistentVolumeClaim:
+            claimName: downloads-series
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: downloads-torrents
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: plex-server
+  labels:
+    app: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Europe/Madrid"
+          ports:
+          - name: radarr
+            containerPort: 7878
+          volumeMounts:
+            - name: radarr-config
+              mountPath: /config
+            - name: movies
+              mountPath: /movies
+            - name: downloads
+              mountPath: /downloads
+      volumes:
+        - name: radarr-config
+          persistentVolumeClaim:
+            claimName: radarr-config
+        - name: movies
+          persistentVolumeClaim:
+            claimName: downloads-movies
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: downloads-torrents

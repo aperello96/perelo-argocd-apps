@@ -42,3 +42,29 @@ spec:
   ports:
     - port: 9117
       targetPort: jackett
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr-service
+  namespace: plex-server
+spec:
+  selector:
+    app: sonarr
+  type: ClusterIP
+  ports:
+    - port: 8989
+      targetPort: sonarr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr-service
+  namespace: plex-server
+spec:
+  selector:
+    app: radarr
+  type: ClusterIP
+  ports:
+    - port: 7878
+      targetPort: radarr

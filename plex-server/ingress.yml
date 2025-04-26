@@ -42,3 +42,47 @@ spec:
   - hosts:
     - jackett.local.perelohome.com
     secretName: plex-server-jackett-tls-secret
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-server-sonarr-ingress
+  namespace: plex-server
+spec:
+  rules:
+  - host: "sonarr.local.perelohome.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sonarr-service
+            port:
+              number: 8989
+  tls:
+  - hosts:
+    - sonarr.local.perelohome.com
+    secretName: plex-server-sonarr-tls-secret
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-server-radarr-ingress
+  namespace: plex-server
+spec:
+  rules:
+  - host: "radarr.local.perelohome.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: radarr-service
+            port:
+              number: 7878
+  tls:
+  - hosts:
+    - radarr.local.perelohome.com
+    secretName: plex-server-radarr-tls-secret

@@ -24,3 +24,29 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - jackett.local.perelohome.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-server-sonarr-cert
+  namespace: plex-server
+spec:
+  secretName: plex-server-sonarr-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - sonarr.local.perelohome.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-server-radarr-cert
+  namespace: plex-server
+spec:
+  secretName: plex-server-radarr-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - radarr.local.perelohome.com

@@ -20,3 +20,25 @@ spec:
   - hosts:
     - qbittorrent.local.perelohome.com
     secretName: plex-server-qbittorrent-tls-secret
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex-server-jackett-ingress
+  namespace: plex-server
+spec:
+  rules:
+  - host: "jackett.local.perelohome.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jackett-service
+            port:
+              number: 9117
+  tls:
+  - hosts:
+    - jackett.local.perelohome.com
+    secretName: plex-server-jackett-tls-secret

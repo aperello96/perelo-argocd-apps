@@ -11,3 +11,16 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - qbittorrent.local.perelohome.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-server-jackett-cert
+  namespace: plex-server
+spec:
+  secretName: plex-server-jackett-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - jackett.local.perelohome.com

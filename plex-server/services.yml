@@ -19,31 +19,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: transmission-service
-  namespace: plex-server
-  labels:
-    app: transmission
-spec:
-  type: ClusterIP
-  ports:
-    - name: web
-      port: 9091
-      targetPort: 9091
-      protocol: TCP
-    - name: torrent-tcp
-      port: 51413
-      targetPort: 51413
-      protocol: TCP
-    - name: torrent-udp
-      port: 51413
-      targetPort: 51413
-      protocol: UDP
-  selector:
-    app: transmission
----
-apiVersion: v1
-kind: Service
-metadata:
   name: qbittorrent
   namespace: plex-server
 spec:
@@ -54,3 +29,16 @@ spec:
   ports:
     - port: 8080
       targetPort: qbittorrent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jackett-service
+  namespace: plex-server
+spec:
+  selector:
+    app: jackett
+  type: ClusterIP
+  ports:
+    - port: 9117
+      targetPort: jackett

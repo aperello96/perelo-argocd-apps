@@ -25,19 +25,6 @@ spec:
       storage: 10Gi
   storageClassName: longhorn
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: transmission-pvc-downloads
-  namespace: plex-server
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: longhorn
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

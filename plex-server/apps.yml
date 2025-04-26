@@ -34,46 +34,6 @@ spec:
           persistentVolumeClaim:
             claimName: plex-pvc-datatest
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: transmission-deployment
-  namespace: plex-server
-  labels:
-    app: transmission
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: transmission
-  template:
-    metadata:
-      labels:
-        app: transmission
-    spec:
-      containers:
-        - name: transmission
-          image: lscr.io/linuxserver/transmission:latest
-          command: ["transmission-daemon", "-f", "-g", "/config"]
-          ports:
-            - containerPort: 9091
-            - containerPort: 51413
-            - containerPort: 51413
-              protocol: UDP
-          volumeMounts:
-            - name: transmission-config
-              mountPath: /config/settings.json
-              subPath: settings.json
-            - name: transmission-downloads
-              mountPath: /downloads
-      volumes:
-        - name: transmission-config
-          configMap:
-            name: transmission-settings-configmap
-        - name: transmission-downloads
-          persistentVolumeClaim:
-            claimName: transmission-pvc-downloads
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:

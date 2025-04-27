@@ -34,7 +34,7 @@ spec:
             - name: PGID
               value: "1000"
             - name: PLEX_CLAIM
-              value: "claim-8Vx3d-YbqUEsFb2v_zFG" # Replace with your claim token
+              value: "claim-XFE9rtVsB9yBoexf5td1" # Replace with your claim token
       volumes:
         - name: plex-config
           persistentVolumeClaim:

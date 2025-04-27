@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: plex
-          image: linuxserver/plex:latest
+          image: linuxserver/plex:1.41.3.9314-a0bfb8370-ls251
           ports:
             - containerPort: 32400
           volumeMounts:

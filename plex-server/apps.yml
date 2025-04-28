@@ -28,6 +28,8 @@ spec:
               mountPath: /series
             - name: plex-movies
               mountPath: /movies
+            - name: plex-courses
+              mountPath: /courses
           env:
             - name: PUID
               value: "1000"
@@ -45,6 +47,9 @@ spec:
         - name: plex-movies
           persistentVolumeClaim:
             claimName: downloads-movies
+        - name: plex-courses
+          persistentVolumeClaim:
+            claimName: downloads-courses
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -236,6 +241,50 @@ spec:
         - name: movies
           persistentVolumeClaim:
             claimName: downloads-movies
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: downloads-torrents
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-operator
+  namespace: plex-server
+  labels:
+    app: operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: operator
+  template:
+    metadata:
+      labels:
+        app: operator
+    spec:
+      containers:
+        - name: plex
+          image: ubuntu:24.04
+          command: ["/bin/bash", "-c", "while true; do sleep 30; done;"]
+          volumeMounts:
+            - name: downloads
+              mountPath: /downloads
+            - name: plex-series
+              mountPath: /series
+            - name: plex-movies
+              mountPath: /movies
+            - name: plex-courses
+              mountPath: /courses
+      volumes:
+        - name: plex-series
+          persistentVolumeClaim:
+            claimName: downloads-series
+        - name: plex-movies
+          persistentVolumeClaim:
+            claimName: downloads-movies
+        - name: plex-courses
+          persistentVolumeClaim:
+            claimName: downloads-courses
         - name: downloads
           persistentVolumeClaim:
             claimName: downloads-torrents

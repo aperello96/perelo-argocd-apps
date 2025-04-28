@@ -102,3 +102,16 @@ spec:
   resources:
     requests:
       storage: 200Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: downloads-courses
+  namespace: plex-server
+spec:
+  storageClassName: longhorn
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi

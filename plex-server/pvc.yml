@@ -12,6 +12,19 @@ spec:
       storage: 20Gi
   storageClassName: longhorn
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-pvc-config
+  namespace: plex-server
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: longhorn
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

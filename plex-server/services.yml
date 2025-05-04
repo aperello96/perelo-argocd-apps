@@ -68,3 +68,16 @@ spec:
   ports:
     - port: 7878
       targetPort: radarr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin-service
+  namespace: plex-server
+spec:
+  selector:
+    app: jellyfin
+  type: ClusterIP
+  ports:
+    - port: 8096
+      targetPort: jellyfin

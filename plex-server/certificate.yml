@@ -50,3 +50,16 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - radarr.local.perelohome.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-server-jellyfin-cert
+  namespace: plex-server
+spec:
+  secretName: plex-server-jellyfin-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - jellyfin.perelohome.com

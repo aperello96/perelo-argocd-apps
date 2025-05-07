@@ -1,0 +1,13 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jupyter-server-cert
+  namespace: jupyter-notebook
+spec:
+  secretName: jupyter-server-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - jupyter.local.perelohome.com

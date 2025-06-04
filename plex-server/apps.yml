@@ -50,58 +50,6 @@ spec:
           persistentVolumeClaim:
             claimName: downloads-courses
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: plex-deployment
-  namespace: plex-server
-  labels:
-    app: plex
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: plex
-  template:
-    metadata:
-      labels:
-        app: plex
-    spec:
-      containers:
-        - name: plex
-          image: linuxserver/plex:1.41.3.9314-a0bfb8370-ls251
-          ports:
-            - containerPort: 32400
-          volumeMounts:
-            - name: plex-config
-              mountPath: /config
-            - name: plex-series
-              mountPath: /series
-            - name: plex-movies
-              mountPath: /movies
-            - name: plex-courses
-              mountPath: /courses
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: PLEX_CLAIM
-              value: "claim-XFE9rtVsB9yBoexf5td1" # Replace with your claim token
-      volumes:
-        - name: plex-config
-          persistentVolumeClaim:
-            claimName: plex-pvc-config
-        - name: plex-series
-          persistentVolumeClaim:
-            claimName: downloads-series
-        - name: plex-movies
-          persistentVolumeClaim:
-            claimName: downloads-movies
-        - name: plex-courses
-          persistentVolumeClaim:
-            claimName: downloads-courses
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:

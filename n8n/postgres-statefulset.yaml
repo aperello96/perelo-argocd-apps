@@ -25,3 +25,10 @@ spec:
         envFrom:
         - secretRef:
             name: postgres-secrets
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data # Ruta donde PostgreSQL almacena los datos
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data-pvc

@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tripted
+  namespace: travelroute
+  labels:
+    app: tripted
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tripted
+  template:
+    metadata:
+      labels:
+        app: tripted
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: tripted
+          image: tripted/tripted-app
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripted-service
+  namespace: travelroute
+spec:
+  selector:
+    app: tripted
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tripted-ingress
+  namespace: travelroute
+spec:
+  rules:
+  - host: "tripted.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: tripted-service
+            port:
+              number: 3000
+  tls:
+  - hosts:
+    - tripted.com
+    secretName: tripted-server-tls-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tripted-server-cert
+  namespace: travelroute
+spec:
+  secretName: tripted-server-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer-tripted
+    kind: ClusterIssuer
+  dnsNames:
+    - tripted.com

@@ -20,7 +20,7 @@ spec:
         - name: regcred
       containers:
         - name: tripted
-          image: tripted/tripted-app
+          image: tripted/tripted-app:v1.1.0
           ports:
             - containerPort: 3000
 ---

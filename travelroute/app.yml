@@ -20,9 +20,35 @@ spec:
         - name: regcred
       containers:
         - name: tripted
-          image: tripted/tripted-app:v1.1.0
+          image: tripted/tripted-app:main
           ports:
             - containerPort: 3000
+          env:
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: GOOGLE_API_KEY
+            - name: VENICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: VENICE_API_KEY
+            - name: AVIASALES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: AVIASALES_API_KEY
+            - name: TRAVELPAYOUTS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: TRAVELPAYOUTS_ID
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: MONGODB_URI
 ---
 apiVersion: v1
 kind: Service

@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tripted
+  namespace: staging-travelroute
+  labels:
+    app: tripted
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tripted
+  template:
+    metadata:
+      labels:
+        app: tripted
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: tripted
+          image: tripted/tripted-app:staging
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: GOOGLE_API_KEY
+            - name: VENICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: VENICE_API_KEY
+            - name: AVIASALES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: AVIASALES_API_KEY
+            - name: TRAVELPAYOUTS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: TRAVELPAYOUTS_ID
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: MONGODB_URI
+            - name: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripted-service
+  namespace: staging-travelroute
+spec:
+  selector:
+    app: tripted
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tripted-ingress
+  namespace: staging-travelroute
+spec:
+  rules:
+  - host: "staging.tripted.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: tripted-service
+            port:
+              number: 3000
+  tls:
+  - hosts:
+    - staging.tripted.com
+    secretName: tripted-server-tls-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tripted-server-cert
+  namespace: staging-travelroute
+spec:
+  secretName: tripted-server-tls-secret
+  issuerRef:
+    name: cloudflare-clusterissuer-tripted
+    kind: ClusterIssuer
+  dnsNames:
+    - staging.tripted.com

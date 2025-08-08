@@ -21,6 +21,7 @@ spec:
       containers:
         - name: tripted
           image: tripted/tripted-app:main
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
@@ -49,6 +50,87 @@ spec:
                 secretKeyRef:
                   name: planner-secrets
                   key: MONGODB_URI
+            - name: EMAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: EMAIL_FROM
+            - name: EMAIL_SERVER_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: EMAIL_SERVER_HOST
+            - name: EMAIL_SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: EMAIL_SERVER_PASSWORD
+            - name: EMAIL_SERVER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: EMAIL_SERVER_PORT
+            - name: EMAIL_SERVER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: EMAIL_SERVER_USER
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: GOOGLE_CLIENT_SECRET
+            - name: GPT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: GPT_API_KEY
+            - name: IMPACT_SID
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: IMPACT_SID
+            - name: IMPACT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: IMPACT_TOKEN
+            - name: NEXT_PUBLIC_TURNSTILE_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: NEXT_PUBLIC_TURNSTILE_SITE_KEY
+            - name: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: NEXTAUTH_SECRET
+            - name: NEXTAUTH_URL
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: NEXTAUTH_URL
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: OPENAI_API_KEY
+            - name: TURNSTILE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: TURNSTILE_SECRET_KEY
+
 ---
 apiVersion: v1
 kind: Service

@@ -21,6 +21,7 @@ spec:
       containers:
         - name: tripted
           image: tripted/tripted-app:staging
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:

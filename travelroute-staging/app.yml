@@ -152,7 +152,7 @@ metadata:
   namespace: staging-travelroute
 spec:
   rules:
-  - host: "staging.tripted.com"
+  - host: "staging.local.tripted.com"
     http:
       paths:
       - path: /
@@ -164,7 +164,7 @@ spec:
               number: 3000
   tls:
   - hosts:
-    - staging.tripted.com
+    - staging.local.tripted.com
     secretName: tripted-server-tls-secret
 ---
 apiVersion: cert-manager.io/v1
@@ -178,4 +178,4 @@ spec:
     name: cloudflare-clusterissuer-tripted
     kind: ClusterIssuer
   dnsNames:
-    - staging.tripted.com
+    - staging.local.tripted.com

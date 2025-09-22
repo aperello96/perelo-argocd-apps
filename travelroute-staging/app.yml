@@ -25,26 +25,15 @@ spec:
           ports:
             - containerPort: 3000
           env:
+            - name: NEXT_PUBLIC_DISTANCE_HOTELS_KM
+              value: "50"
+            - name: NEXT_PUBLIC_HOTELBEDS_BASE_URL
+              value: "https://api.test.hotelbeds.com"
             - name: GOOGLE_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: staging-planner-secrets
                   key: GOOGLE_API_KEY
-            - name: VENICE_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: VENICE_API_KEY
-            - name: AVIASALES_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: AVIASALES_API_KEY
-            - name: TRAVELPAYOUTS_ID
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: TRAVELPAYOUTS_ID
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
@@ -85,11 +74,6 @@ spec:
                 secretKeyRef:
                   name: staging-planner-secrets
                   key: GOOGLE_CLIENT_SECRET
-            - name: GPT_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: GPT_API_KEY
             - name: IMPACT_SID
               valueFrom:
                 secretKeyRef:
@@ -130,6 +114,26 @@ spec:
                 secretKeyRef:
                   name: staging-planner-secrets
                   key: TURNSTILE_SECRET_KEY
+            - name: HOTELBEDS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: staging-planner-secrets
+                  key: HOTELBEDS_API_KEY
+            - name: HOTELBEDS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: staging-planner-secrets
+                  key: HOTELBEDS_SECRET
+            - name: AMADEUS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: staging-planner-secrets
+                  key: AMADEUS_API_KEY
+            - name: AMADEUS_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: staging-planner-secrets
+                  key: AMADEUS_API_SECRET
 
 ---
 apiVersion: v1

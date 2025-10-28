@@ -7,7 +7,7 @@ metadata:
   labels:
     app: tripted
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: tripted
@@ -20,15 +20,11 @@ spec:
         - name: regcred
       containers:
         - name: tripted
-          image: tripted/tripted-app:staging
+          image: tripted/tripted-app:v1.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
-            - name: NEXT_PUBLIC_DISTANCE_HOTELS_KM
-              value: "50"
-            - name: NEXT_PUBLIC_HOTELBEDS_BASE_URL
-              value: "https://api.test.hotelbeds.com"
             - name: GOOGLE_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -74,6 +70,11 @@ spec:
                 secretKeyRef:
                   name: staging-planner-secrets
                   key: GOOGLE_CLIENT_SECRET
+            - name: GPT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: staging-planner-secrets
+                  key: GPT_API_KEY
             - name: IMPACT_SID
               valueFrom:
                 secretKeyRef:
@@ -114,26 +115,6 @@ spec:
                 secretKeyRef:
                   name: staging-planner-secrets
                   key: TURNSTILE_SECRET_KEY
-            - name: HOTELBEDS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: HOTELBEDS_API_KEY
-            - name: HOTELBEDS_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: HOTELBEDS_SECRET
-            - name: AMADEUS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: AMADEUS_API_KEY
-            - name: AMADEUS_API_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: AMADEUS_API_SECRET
 
 ---
 apiVersion: v1

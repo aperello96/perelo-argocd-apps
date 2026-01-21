@@ -34,7 +34,7 @@ csiConfig:
 #       crushLocationLabels:
 #         - topology.kubernetes.io/region
 #         - topology.kubernetes.io/zone
-csiConfig: []
+
 
 # Configuration details of clusterID,PoolID and FscID mapping
 # csiMapping:

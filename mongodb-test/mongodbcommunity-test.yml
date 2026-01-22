@@ -9,6 +9,30 @@ metadata:
   name: mongodb-database
   namespace: mongodb-test
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mongodb-database-secret-reader
+  namespace: mongodb-test
+rules:
+  - apiGroups: [""]
+    resources: ["secrets", "pods"]
+    verbs: ["get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mongodb-database-secret-reader
+  namespace: mongodb-test
+subjects:
+  - kind: ServiceAccount
+    name: mongodb-database
+    namespace: mongodb-test
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: mongodb-database-secret-reader
+---
 apiVersion: v1
 kind: Secret
 metadata:

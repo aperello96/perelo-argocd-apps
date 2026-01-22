@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: percona-psmdb-operator
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: psmdb
+  source:
+    repoURL: https://percona.github.io/percona-helm-charts/
+    chart: psmdb-operator
+    # Use a semver range to follow the latest chart. Pin an exact version if you prefer.
+    targetRevision: "1.21.2"
+    helm:
+      releaseName: my-op
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: percona-psmdb-cluster1
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: psmdb
+  source:
+    repoURL: https://percona.github.io/percona-helm-charts/
+    chart: psmdb-db
+    # Use a semver range to follow the latest chart. Pin an exact version if you prefer.
+    targetRevision: "1.21.2"
+    helm:
+      releaseName: cluster1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

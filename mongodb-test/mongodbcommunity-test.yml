@@ -4,6 +4,12 @@ metadata:
   name: mongodb-test
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongodb-database
+  namespace: mongodb-test
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: mongodb-test-mongodb-admin
@@ -33,10 +39,10 @@ spec:
       roles:
         - name: root
           db: admin
-      scramCredentialsSecretName: travelroute-mongodb-admin-scram
+      scramCredentialsSecretName: mongodb-test-mongodb-admin-scram
   statefulSet:
     spec:
-      serviceName: travelroute-mongodb-svc
+      serviceName: mongodb-test-mongodb-svc
       template:
         spec:
           containers:
@@ -44,6 +50,9 @@ spec:
               resources:
                 requests:
                   cpu: "500m"
+                  memory: "500Mi"
+                limits:
+                  cpu: "1"
                   memory: "1Gi"
       volumeClaimTemplates:
         - metadata:

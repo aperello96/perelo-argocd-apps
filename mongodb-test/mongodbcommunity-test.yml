@@ -1,13 +1,13 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: mongodb-test
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: mongodb-test
 ---
 apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
   name: example-mongodb
-  namespace: mongodb-test
+  namespace: mongodb
 spec:
   members: 3
   type: ReplicaSet
@@ -36,7 +36,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: my-user-password
-  namespace: mongodb-test
+  namespace: mongodb
 type: Opaque
 stringData:
   password: <your-password-here>

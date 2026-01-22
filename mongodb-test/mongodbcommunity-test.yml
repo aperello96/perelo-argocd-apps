@@ -3,6 +3,24 @@ kind: Namespace
 metadata:
   name: mongodb-test
 ---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+ name: mongodb-kubernetes-database-pods
+ namespace: mongodb-test
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+ name: mongodb-kubernetes-appdb
+ namespace: mongodb-test
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+ name: mongodb-kubernetes-ops-manager
+ namespace: mongodb-test
+---
 apiVersion: v1
 kind: Secret
 metadata:
@@ -36,7 +54,7 @@ spec:
       scramCredentialsSecretName: mongodb-test-mongodb-admin-scram
   statefulSet:
     spec:
-      serviceName: travelroute-mongodb-svc
+      serviceName: mongodb-test-mongodb-svc
       template:
         spec:
           containers:

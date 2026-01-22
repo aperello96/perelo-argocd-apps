@@ -66,9 +66,11 @@ spec:
       scramCredentialsSecretName: mongodb-test-mongodb-admin-scram
   statefulSet:
     spec:
-      serviceName: mongodb-test-mongodb-svc
       template:
         spec:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
           containers:
             - name: mongod
               resources:

@@ -29,7 +29,7 @@ EOF
 ```
 Generamos el token que se va a usar por external-secrets
 ```bash
-vault token create -policy=external-secrets #GUARDAMOS EL TOKEN
+vault token create -policy=external-secrets #GUARDAMOS EL TOKEN (SOLO DURA 760H)
 ```
 Ahora creamos un secret en kubernets para el external-secrets: 
 ```bash
@@ -100,3 +100,6 @@ kubectl apply -f demo-externalsecret.yaml
 kubectl get secret demo-secret -o yaml
 kubectl get externalsecret -A
 ```
+
+## Habilitamos el acceso web:
+Sincronizamos en argocd el certificado y el ingress y metemos en nuestro DNS el acceso

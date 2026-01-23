@@ -22,12 +22,7 @@ spec:
     - horizon: db-node-3.local.perelohome.com:30019
   security:
     tls:
-      enabled: true
-      certificateKeySecretRef:
-        name: mongodb-test-1-tls-secret
-      caCertificateSecretRef:
-        name: mongodb-test-1-tls-secret
-      # optional: true
+      enabled: false
     authentication:
       modes:
         - SCRAM

@@ -12,7 +12,7 @@ spec:
     - name: admin
       db: plannerdb
       passwordSecretRef:
-        name: admin-user
+        name: mongodb-password
       roles:
         - name: root
           db: plannerdb

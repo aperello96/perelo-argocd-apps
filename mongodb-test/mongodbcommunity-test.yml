@@ -38,9 +38,6 @@ spec:
     spec:
       serviceName: mongodb-test-mongodb-svc
       template:
-        metadata:
-          labels:
-            app: mongodb-test-mongodb
         spec:
           containers:
             - name: mongod

@@ -620,10 +620,8 @@ spec:
           cpu: "300m"
           memory: "1Gi"
       expose:
-        # For external access from outside the cluster, NodePort is the simplest option on k3s.
-        # (Alternative: LoadBalancer if you have MetalLB, or Traefik TCP entryPoint.)
-        type: NodePort
-        nodePort: 32017
+        # Keep this service internal (ClusterIP); expose it externally via Traefik TCP (IngressRouteTCP).
+        type: ClusterIP
 #        servicePerPod: true
 #        loadBalancerClass: "eks.amazonaws.com/nlb"
 #        loadBalancerSourceRanges:

@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: percona-test-ingress
+  namespace: percona-test
+spec:
+  rules:
+  - host: "percona-test.local.perelohome.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-cluster-name-mongos 
+            port:
+              number: 27017
+  tls:
+  - hosts:
+    - percona-test.local.perelohome.com
+    secretName: percona-test-tls-secret

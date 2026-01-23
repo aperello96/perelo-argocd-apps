@@ -620,8 +620,10 @@ spec:
           cpu: "300m"
           memory: "1Gi"
       expose:
-        # Keep this service internal (ClusterIP); expose it externally via Traefik TCP (IngressRouteTCP).
-        type: ClusterIP
+        # NodePort: chooses the external port on the node (must be within the cluster NodePort range, typically 30000-32767).
+        # If you want to expose via Traefik TCP instead, keep this as ClusterIP and use IngressRouteTCP + entryPoint.
+        type: NodePort
+        nodePort: 32017
 #        servicePerPod: true
 #        loadBalancerClass: "eks.amazonaws.com/nlb"
 #        loadBalancerSourceRanges:

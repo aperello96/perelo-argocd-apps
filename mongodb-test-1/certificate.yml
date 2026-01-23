@@ -1,2 +1,0 @@
-# TLS/cert-manager intentionally disabled for this app.
-# The MongoDBCommunity resource in mongodb-test-1/application.yml has `spec.security.tls.enabled: false`.

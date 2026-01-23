@@ -1,0 +1,63 @@
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: mongodb
+  namespace: staging-travelroute
+spec:
+  members: 3
+  type: ReplicaSet
+  version: "8.0.10"
+  users:
+    - name: admin
+      db: plannerdb
+      passwordSecretRef:
+        name: admin-user
+      roles:
+        - name: root
+          db: plannerdb
+      scramCredentialsSecretName: my-scram
+  replicaSetHorizons:
+    - horizon: db-node-1.local.perelohome.com:32017
+    - horizon: db-node-2.local.perelohome.com:32018
+    - horizon: db-node-3.local.perelohome.com:32019
+  security:
+    tls:
+      enabled: false
+    authentication:
+      modes:
+        - SCRAM
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mongod
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2Gi
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - mongodb
+                  topologyKey: "kubernetes.io/hostname"
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5G

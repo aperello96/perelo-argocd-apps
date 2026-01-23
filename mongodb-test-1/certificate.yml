@@ -9,9 +9,6 @@ spec:
     name: cloudflare-clusterissuer
     kind: ClusterIssuer
   dnsNames:
-    - mongodb-0..local.perelohome.com
-    - mongodb-1..local.perelohome.com
-    - mongodb-2..local.perelohome.com
     - db-node-1.local.perelohome.com
     - db-node-2.local.perelohome.com
     - db-node-3.local.perelohome.com

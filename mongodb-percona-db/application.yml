@@ -15,6 +15,14 @@ spec:
     targetRevision: "1.21.2"
     helm:
       releaseName: cluster1
+      parameters:
+        # ExitCode 132 in `mongod` is commonly an illegal-instruction crash
+        # (e.g., CPU missing AVX). MongoDB/PSMDB 5.x+ typically requires AVX.
+        # Pin to a 4.4.x tag if your nodes don't support AVX.
+        - name: image.tag
+          value: "4.4.29-23"
+        - name: imagePullPolicy
+          value: IfNotPresent
   syncPolicy:
     automated:
       prune: true

@@ -28,92 +28,87 @@ spec:
             - name: GOOGLE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: GOOGLE_API_KEY
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: MONGODB_URI
             - name: EMAIL_FROM
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: EMAIL_FROM
             - name: EMAIL_SERVER_HOST
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: EMAIL_SERVER_HOST
             - name: EMAIL_SERVER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: EMAIL_SERVER_PASSWORD
             - name: EMAIL_SERVER_PORT
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: EMAIL_SERVER_PORT
             - name: EMAIL_SERVER_USER
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: EMAIL_SERVER_USER
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: GOOGLE_CLIENT_ID
             - name: GOOGLE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: GOOGLE_CLIENT_SECRET
-            - name: GPT_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: staging-planner-secrets
-                  key: GPT_API_KEY
             - name: IMPACT_SID
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: IMPACT_SID
             - name: IMPACT_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: IMPACT_TOKEN
             - name: NEXT_PUBLIC_TURNSTILE_SITE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: NEXT_PUBLIC_TURNSTILE_SITE_KEY
             - name: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: NEXTAUTH_SECRET
             - name: NEXTAUTH_URL
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: NEXTAUTH_URL
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: OPENAI_API_KEY
             - name: TURNSTILE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: staging-planner-secrets
+                  name: tripted-secret
                   key: TURNSTILE_SECRET_KEY
 
 ---

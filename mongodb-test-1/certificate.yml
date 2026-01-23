@@ -42,11 +42,9 @@ metadata:
   namespace: mongodb-test-1
 spec:
   secretName: mongodb-test-1-tls-secret
-  # IMPORTANT: Using a CA Issuer makes cert-manager write `ca.crt` into this secret.
-  # The MongoDBCommunity operator requires `ca.crt` for `caCertificateSecretRef`.
   issuerRef:
     name: mongodb-test-1-ca-issuer
-    kind: Issuer
+    kind: ClusterIssuer
   dnsNames:
     # Internal pod DNS (StatefulSet + headless service)
     - mongodb-0.mongodb-svc.mongodb-test-1.svc.cluster.local

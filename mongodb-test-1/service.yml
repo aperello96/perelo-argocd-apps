@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc-0
+  namespace: mongodb-test-1
+spec:
+  type: NodePort
+  ports:
+    - name: mongodb
+      port: 27017
+      protocol: TCP
+      nodePort: 30017
+  selector:
+    app: mongodb-svc
+    statefulset.kubernetes.io/pod-name: mongodb-0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc-1
+  namespace: mongodb-test-1
+spec:
+  type: NodePort
+  ports:
+    - name: mongodb
+      port: 27017
+      protocol: TCP
+      nodePort: 30018
+  selector:
+    app: mongodb-svc
+    statefulset.kubernetes.io/pod-name: mongodb-1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc-2
+  namespace: mongodb-test-1
+spec:
+  type: NodePort
+  ports:
+    - name: mongodb
+      port: 27017
+      protocol: TCP
+      nodePort: 30019
+  selector:
+    app: mongodb-svc
+    statefulset.kubernetes.io/pod-name: mongodb-2

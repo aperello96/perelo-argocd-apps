@@ -10,12 +10,12 @@ spec:
   version: "8.0.10"
   users:
     - name: admin
-      db: plannerdb
+      db: admin
       passwordSecretRef:
         name: mongodb-password
       roles:
         - name: root
-          db: plannerdb
+          db: admin
       scramCredentialsSecretName: my-scram
   replicaSetHorizons:
     - horizon: db-node-1.local.perelohome.com:32017

@@ -5,9 +5,8 @@ metadata:
   name: mongodb-service-cluster
   namespace: staging-travelroute
 spec:
-  type: ClusterIP
-  selector:
-    app: mongo
+  type: ExternalName
+  externalName: mongodb-svc.staging-travelroute.svc.cluster.local
   ports:
     - protocol: TCP
       port: 27017

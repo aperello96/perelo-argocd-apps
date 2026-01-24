@@ -18,9 +18,9 @@ spec:
           db: admin
       scramCredentialsSecretName: my-scram-v2
   replicaSetHorizons:
-    - horizon: db-node-1.local.perelohome.com:32017
-    - horizon: db-node-2.local.perelohome.com:32018
-    - horizon: db-node-3.local.perelohome.com:32019
+    - horizon: db-node-1.local.perelohome.com:31017
+    - horizon: db-node-2.local.perelohome.com:31018
+    - horizon: db-node-3.local.perelohome.com:31019
   security:
     tls:
       enabled: false

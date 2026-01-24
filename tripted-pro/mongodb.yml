@@ -1,0 +1,107 @@
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: mongodb
+  namespace: pro-travelroute
+spec:
+  members: 3
+  type: ReplicaSet
+  version: "8.0.10"
+  users:
+    - name: admin
+      db: admin
+      passwordSecretRef:
+        name: mongodb-password
+      roles:
+        - name: root
+          db: admin
+      scramCredentialsSecretName: my-scram-v2
+  replicaSetHorizons:
+    - horizon: db-node-1.local.perelohome.com:32017
+    - horizon: db-node-2.local.perelohome.com:32018
+    - horizon: db-node-3.local.perelohome.com:32019
+  security:
+    tls:
+      enabled: false
+    authentication:
+      modes:
+        - SCRAM
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mongod
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2Gi
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - mongodb
+                  topologyKey: "kubernetes.io/hostname"
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 15G
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongodb-database
+  namespace: pro-travelroute
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mongodb-database
+  namespace: pro-travelroute
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - patch
+      - delete
+      - get
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mongodb-database
+  namespace: pro-travelroute
+subjects:
+  - kind: ServiceAccount
+    name: mongodb-database
+    namespace: pro-travelroute
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: mongodb-database

@@ -16,7 +16,7 @@ spec:
       roles:
         - name: root
           db: admin
-      scramCredentialsSecretName: my-scram
+      scramCredentialsSecretName: my-scram-v2
   replicaSetHorizons:
     - horizon: db-node-1.local.perelohome.com:32017
     - horizon: db-node-2.local.perelohome.com:32018

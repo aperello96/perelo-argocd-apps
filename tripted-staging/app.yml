@@ -110,6 +110,11 @@ spec:
                 secretKeyRef:
                   name: tripted-secret
                   key: TURNSTILE_SECRET_KEY
+            - name: AVIASALES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: AVIASALES_API_KEY
 
 ---
 apiVersion: v1

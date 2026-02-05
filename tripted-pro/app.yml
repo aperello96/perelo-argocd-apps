@@ -20,7 +20,7 @@ spec:
         - name: regcred
       containers:
         - name: tripted
-          image: tripted/tripted-app:v1.1.6b
+          image: tripted/tripted-app:v1.1.8
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

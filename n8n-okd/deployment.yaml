@@ -1,5 +1,11 @@
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: n8n
+  namespace: n8n
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: n8n-data
@@ -31,26 +37,40 @@ spec:
       labels:
         app: n8n
     spec:
+      serviceAccountName: n8n
+      initContainers:
+      - name: fix-permissions
+        image: busybox:latest
+        command:
+        - sh
+        - -c
+        - |
+          mkdir -p /data/.n8n
+          chown -R 1000:1000 /data
+          chmod -R 755 /data
+          ls -la /data
+        volumeMounts:
+        - name: n8n-data
+          mountPath: /data
       containers:
       - name: n8n
         image: docker.n8n.io/n8nio/n8n:latest
         ports:
         - containerPort: 5678
           name: http
+          protocol: TCP
         env:
         - name: N8N_USER_FOLDER
-          value: "/home/node/.n8n"
+          value: "/data"
         - name: N8N_PORT
           value: "5678"
-        - name: N8N_PROTOCOL
-          value: "https"
         - name: GENERIC_TIMEZONE
           value: "Europe/Madrid"
         - name: TZ
           value: "Europe/Madrid"
         volumeMounts:
         - name: n8n-data
-          mountPath: /home/node/.n8n
+          mountPath: /data
         resources:
           requests:
             memory: "512Mi"
@@ -62,14 +82,18 @@ spec:
           httpGet:
             path: /healthz
             port: 5678
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /healthz
             port: 5678
-          initialDelaySeconds: 15
+          initialDelaySeconds: 30
           periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
       volumes:
       - name: n8n-data
         persistentVolumeClaim:

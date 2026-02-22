@@ -1,0 +1,166 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tripted
+  namespace: tripted-staging
+  labels:
+    app: tripted
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tripted
+  template:
+    metadata:
+      labels:
+        app: tripted
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: tripted
+          image: tripted/tripted-app:v1.1.8b
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: GOOGLE_API_KEY
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: MONGODB_URI
+            - name: EMAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: EMAIL_FROM
+            - name: EMAIL_SERVER_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: EMAIL_SERVER_HOST
+            - name: EMAIL_SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: EMAIL_SERVER_PASSWORD
+            - name: EMAIL_SERVER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: EMAIL_SERVER_PORT
+            - name: EMAIL_SERVER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: EMAIL_SERVER_USER
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: GOOGLE_CLIENT_SECRET
+            - name: IMPACT_SID
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: IMPACT_SID
+            - name: IMPACT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: IMPACT_TOKEN
+            - name: NEXT_PUBLIC_TURNSTILE_SITE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: NEXT_PUBLIC_TURNSTILE_SITE_KEY
+            - name: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: NEXTAUTH_SECRET
+            - name: NEXTAUTH_URL
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: NEXTAUTH_URL
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: OPENAI_API_KEY
+            - name: TURNSTILE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: TURNSTILE_SECRET_KEY
+            - name: AVIASALES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tripted-secret
+                  key: AVIASALES_API_KEY
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripted-service
+  namespace: tripted-staging
+spec:
+  selector:
+    app: tripted
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: tripted-ingress
+#   namespace: tripted-staging
+# spec:
+#   rules:
+#   - host: "staging.local.tripted.com"
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: tripted-service
+#             port:
+#               number: 3000
+#   tls:
+#   - hosts:
+#     - staging.local.tripted.com
+#     secretName: tripted-server-tls-secret
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: tripted-server-cert
+#   namespace: tripted-staging
+# spec:
+#   secretName: tripted-server-tls-secret
+#   issuerRef:
+#     name: cloudflare-clusterissuer-tripted
+#     kind: ClusterIssuer
+#   dnsNames:
+#     - staging.local.tripted.com

@@ -6,7 +6,7 @@ metadata:
   namespace: tripted-staging
 spec:
   type: ExternalName
-  externalName: mongodb-svc.tripted-staging.svc.cluster.local
+  externalName: mongodb-cluster.tripted-staging.svc.cluster.local
   ports:
     - protocol: TCP
       port: 27017

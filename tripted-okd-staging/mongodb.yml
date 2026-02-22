@@ -1,32 +1,66 @@
-apiVersion: opstreelabs.in/v1alpha1
-kind: MongoDBCluster
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
 metadata:
   name: mongodb
   namespace: tripted-staging
 spec:
-  clusterSize: 3
-  kubernetesConfig:
-    image: "quay.io/opstree/mongo:v5.0.6"
-    imagePullPolicy: IfNotPresent
-    securityContext:
-      fsGroup: 1001
-    resources:
-      limits:
-        cpu: "1"
-        memory: 2Gi
-      requests:
-        cpu: 500m
-        memory: 1Gi
-  storage:
-    accessModes:
-      - ReadWriteOnce
-    storageSize: 5Gi
-    storageClass: rook-ceph-block
-  mongoDBSecurity:
-    mongoDBAdminUser: admin
-    secretRef:
-      name: mongodb-password
-      key: password
+  members: 3
+  type: ReplicaSet
+  version: "8.0.10"
+  users:
+    - name: admin
+      db: admin
+      passwordSecretRef:
+        name: mongodb-password
+      roles:
+        - name: root
+          db: admin
+      scramCredentialsSecretName: my-scram-v2
+  replicaSetHorizons:
+    - horizon: db-node-1.local.perelohome.com:31017
+    - horizon: db-node-2.local.perelohome.com:31018
+    - horizon: db-node-3.local.perelohome.com:31019
+  security:
+    tls:
+      enabled: false
+    authentication:
+      modes:
+        - SCRAM
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mongod
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2Gi
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - mongodb
+                  topologyKey: "kubernetes.io/hostname"
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5G
 ---
 apiVersion: v1
 kind: ServiceAccount

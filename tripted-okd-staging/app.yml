@@ -151,16 +151,16 @@ spec:
 #   - hosts:
 #     - staging.local.tripted.com
 #     secretName: tripted-server-tls-secret
-# ---
-# apiVersion: cert-manager.io/v1
-# kind: Certificate
-# metadata:
-#   name: tripted-server-cert
-#   namespace: tripted-staging
-# spec:
-#   secretName: tripted-server-tls-secret
-#   issuerRef:
-#     name: cloudflare-clusterissuer-tripted
-#     kind: ClusterIssuer
-#   dnsNames:
-#     - staging.local.tripted.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tripted-server-cert
+  namespace: tripted-staging
+spec:
+  secretName: tripted-server-tls-secret
+  issuerRef:
+    name: tripted-letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - staging.local.tripted.com

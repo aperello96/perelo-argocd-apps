@@ -127,30 +127,29 @@ spec:
     app: tripted
   type: ClusterIP
   ports:
-    - port: 3000
+    - name: http
+      port: 3000
       targetPort: 3000
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: tripted-ingress
-#   namespace: tripted-staging
-# spec:
-#   rules:
-#   - host: "staging.local.tripted.com"
-#     http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: tripted-service
-#             port:
-#               number: 3000
-#   tls:
-#   - hosts:
-#     - staging.local.tripted.com
-#     secretName: tripted-server-tls-secret
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tripted
+  namespace: tripted-staging
+  labels:
+    app: tripted
+spec:
+  host: staging.local.tripted.com
+  to:
+    kind: Service
+    name: tripted-service
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

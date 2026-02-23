@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-service-cluster
-  namespace: pro-travelroute
+  namespace: tripted-pro
 spec:
   type: ExternalName
   externalName: mongodb-svc.pro-travelroute.svc.cluster.local
@@ -16,7 +16,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-svc-0
-  namespace: pro-travelroute
+  namespace: tripted-pro
 spec:
   type: NodePort
   ports:
@@ -31,7 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-svc-1
-  namespace: pro-travelroute
+  namespace: tripted-pro
 spec:
   type: NodePort
   ports:
@@ -46,7 +46,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-svc-2
-  namespace: pro-travelroute
+  namespace: tripted-pro
 spec:
   type: NodePort
   ports:

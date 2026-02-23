@@ -3,7 +3,7 @@ apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
   name: mongodb
-  namespace: pro-travelroute
+  namespace: tripted-pro
 spec:
   members: 3
   type: ReplicaSet
@@ -66,13 +66,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: mongodb-database
-  namespace: pro-travelroute
+  namespace: tripted-pro
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-database
-  namespace: pro-travelroute
+  namespace: tripted-pro
 rules:
   - apiGroups:
       - ""
@@ -96,11 +96,11 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-database
-  namespace: pro-travelroute
+  namespace: tripted-pro
 subjects:
   - kind: ServiceAccount
     name: mongodb-database
-    namespace: pro-travelroute
+    namespace: tripted-pro
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

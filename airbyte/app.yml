@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: airbyte
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: airbyte
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: airbyte
+  source:
+    repoURL: https://airbytehq.github.io/helm-charts
+    chart: airbyte
+    targetRevision: 1.9.2
+    helm:
+      releaseName: airbyte
+      values: |
+        global:
+          edition: community
+          airbyteUrl: https://airbyte.local.perelohome.com
+          auth:
+            enabled: false
+          storage:
+            type: minio
+          database:
+            type: internal
+          workloads:
+            namespace: airbyte
+
+        ingress:
+          enabled: false
+
+        webapp:
+          enabled: true
+          service:
+            type: ClusterIP
+
+        postgresql:
+          enabled: true
+
+        minio:
+          enabled: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: airbyte
+  namespace: airbyte
+  labels:
+    app: airbyte
+spec:
+  host: airbyte.local.perelohome.com
+  to:
+    kind: Service
+    name: airbyte-airbyte-webapp-svc
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

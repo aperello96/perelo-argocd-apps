@@ -15,9 +15,18 @@ roleRef:
   kind: ClusterRole
   name: system:openshift:scc:anyuid
 subjects:
-  - kind: Group
-    apiGroup: rbac.authorization.k8s.io
-    name: system:serviceaccounts:data-analys
+  - kind: ServiceAccount
+    name: default
+    namespace: data-analys
+  - kind: ServiceAccount
+    name: airbyte-admin
+    namespace: data-analys
+  - kind: ServiceAccount
+    name: airbyte-airbyte
+    namespace: data-analys
+  - kind: ServiceAccount
+    name: airbyte
+    namespace: data-analys
 
 ---
 apiVersion: v1

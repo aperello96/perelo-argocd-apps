@@ -264,6 +264,19 @@ spec:
 
         postgresql:
           enabled: true
+          podSecurityContext:
+            fsGroup: 1000850001
+          containerSecurityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000850001
+            runAsGroup: 1000850001
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile: {}
+          commonAnnotations: {}
 
         minio:
           enabled: true

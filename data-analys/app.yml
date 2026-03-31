@@ -273,28 +273,26 @@ spec:
 
         postgresql:
           enabled: true
-          podSecurityContext:
-            fsGroup: 1000850001
+          podSecurityContext: {}
           containerSecurityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
-            runAsUser: 1000850001
-            runAsGroup: 1000850001
             readOnlyRootFilesystem: false
             capabilities:
               drop:
                 - ALL
-            seccompProfile: {}
+            seccompProfile:
+              type: RuntimeDefault
           commonAnnotations: {}
 
         minio:
           enabled: true
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+        syncPolicy:
+          automated:
+            prune: true
+            selfHeal: true
+          syncOptions:
+            - CreateNamespace=true
 
 ---
 apiVersion: route.openshift.io/v1

@@ -45,6 +45,8 @@ kind: Deployment
 metadata:
   name: mysql
   namespace: data-analys
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
 spec:
   replicas: 1
   selector:

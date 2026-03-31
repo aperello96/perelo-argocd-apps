@@ -15,15 +15,15 @@ spec:
   data:
     - secretKey: MYSQL_ROOT_PASSWORD
       remoteRef:
-        key: apps/mysql/env
+        key: apps/data-analys/mysql
         property: MYSQL_ROOT_PASSWORD
     - secretKey: MYSQL_USER
       remoteRef:
-        key: apps/mysql/env
+        key: apps/data-analys/mysql
         property: MYSQL_USER
     - secretKey: MYSQL_PASSWORD
       remoteRef:
-        key: apps/mysql/env
+        key: apps/data-analys/mysql
         property: MYSQL_PASSWORD
 
 ---

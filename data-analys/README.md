@@ -36,10 +36,10 @@ Secrets are managed with `ExternalSecret` resources (no direct `Secret` manifest
 
 Required Vault paths and properties:
 
-- `apps/mysql/env`
+- `apps/data-analys/mysql`
   - `MYSQL_ROOT_PASSWORD`
   - `MYSQL_USER`
   - `MYSQL_PASSWORD`
-- `apps/metabase/env`
+- `apps/data-analys/metabase`
   - `MB_DB_USER`
   - `MB_DB_PASS`

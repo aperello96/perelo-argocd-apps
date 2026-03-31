@@ -15,11 +15,11 @@ spec:
   data:
     - secretKey: MB_DB_USER
       remoteRef:
-        key: apps/metabase/env
+        key: apps/data-analys/metabase
         property: MB_DB_USER
     - secretKey: MB_DB_PASS
       remoteRef:
-        key: apps/metabase/env
+        key: apps/data-analys/metabase
         property: MB_DB_PASS
 
 ---

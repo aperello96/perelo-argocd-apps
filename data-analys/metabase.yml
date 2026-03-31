@@ -11,7 +11,7 @@ stringData:
   MB_DB_PORT: "3306"
   MB_DB_USER: metabase
   MB_DB_PASS: change-me-metabase-db-pass
-  MB_DB_HOST: mysql
+  MB_DB_HOST: mysql.data-analys.svc.cluster.local
 
 ---
 apiVersion: apps/v1
@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: metabase-app
-          image: metabase/metabase:latest
+          image: metabase/metabase:v0.58.7
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

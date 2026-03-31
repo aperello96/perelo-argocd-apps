@@ -14,3 +14,18 @@ oc auth can-i use scc/privileged --as=system:serviceaccount:data-analys:default 
 
 # force recreate
 oc -n data-analys delete pod airbyte-db-0 --ignore-not-found
+```
+
+## Metabase:
+
+Before deploy metabase, you have to apply this sql on phpmyadmin:
+
+```bash
+CREATE DATABASE IF NOT EXISTS metabase;
+CREATE USER IF NOT EXISTS 'metabase'@'%' IDENTIFIED BY 'change-me-metabase-db-pass';
+GRANT ALL PRIVILEGES ON metabase.* TO 'metabase'@'%';
+FLUSH PRIVILEGES;
+
+ALTER USER 'metabase'@'%' IDENTIFIED WITH mysql_native_password BY 'change-me-metabase-db-pass';
+FLUSH PRIVILEGES;
+```

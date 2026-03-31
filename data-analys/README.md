@@ -29,3 +29,17 @@ FLUSH PRIVILEGES;
 ALTER USER 'metabase'@'%' IDENTIFIED WITH mysql_native_password BY 'change-me-metabase-db-pass';
 FLUSH PRIVILEGES;
 ```
+
+## External Secrets (Vault)
+
+Secrets are managed with `ExternalSecret` resources (no direct `Secret` manifests).
+
+Required Vault paths and properties:
+
+- `apps/mysql/env`
+  - `MYSQL_ROOT_PASSWORD`
+  - `MYSQL_USER`
+  - `MYSQL_PASSWORD`
+- `apps/metabase/env`
+  - `MB_DB_USER`
+  - `MB_DB_PASS`

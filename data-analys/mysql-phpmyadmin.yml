@@ -1,15 +1,30 @@
 ---
-apiVersion: v1
-kind: Secret
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
 metadata:
   name: mysql-credentials
   namespace: data-analys
-type: Opaque
-stringData:
-  MYSQL_ROOT_PASSWORD: change-me-root
-  MYSQL_DATABASE: appdb
-  MYSQL_USER: appuser
-  MYSQL_PASSWORD: change-me-user
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: mysql-credentials
+    creationPolicy: Owner
+  data:
+    - secretKey: MYSQL_ROOT_PASSWORD
+      remoteRef:
+        key: apps/mysql/env
+        property: MYSQL_ROOT_PASSWORD
+    - secretKey: MYSQL_USER
+      remoteRef:
+        key: apps/mysql/env
+        property: MYSQL_USER
+    - secretKey: MYSQL_PASSWORD
+      remoteRef:
+        key: apps/mysql/env
+        property: MYSQL_PASSWORD
 
 ---
 apiVersion: v1
@@ -56,10 +71,7 @@ spec:
                   name: mysql-credentials
                   key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: MYSQL_DATABASE
+              value: appdb
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:

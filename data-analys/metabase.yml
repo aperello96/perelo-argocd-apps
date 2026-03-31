@@ -1,17 +1,26 @@
 ---
-apiVersion: v1
-kind: Secret
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
 metadata:
   name: metabase-secrets
   namespace: data-analys
-type: Opaque
-stringData:
-  MB_DB_TYPE: mysql
-  MB_DB_DBNAME: metabase
-  MB_DB_PORT: "3306"
-  MB_DB_USER: metabase
-  MB_DB_PASS: change-me-metabase-db-pass
-  MB_DB_HOST: mysql.data-analys.svc.cluster.local
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: metabase-secrets
+    creationPolicy: Owner
+  data:
+    - secretKey: MB_DB_USER
+      remoteRef:
+        key: apps/metabase/env
+        property: MB_DB_USER
+    - secretKey: MB_DB_PASS
+      remoteRef:
+        key: apps/metabase/env
+        property: MB_DB_PASS
 
 ---
 apiVersion: apps/v1
@@ -38,20 +47,11 @@ spec:
               name: http
           env:
             - name: MB_DB_TYPE
-              valueFrom:
-                secretKeyRef:
-                  name: metabase-secrets
-                  key: MB_DB_TYPE
+              value: mysql
             - name: MB_DB_DBNAME
-              valueFrom:
-                secretKeyRef:
-                  name: metabase-secrets
-                  key: MB_DB_DBNAME
+              value: metabase
             - name: MB_DB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: metabase-secrets
-                  key: MB_DB_PORT
+              value: "3306"
             - name: MB_DB_USER
               valueFrom:
                 secretKeyRef:
@@ -63,10 +63,7 @@ spec:
                   name: metabase-secrets
                   key: MB_DB_PASS
             - name: MB_DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: metabase-secrets
-                  key: MB_DB_HOST
+              value: mysql.data-analys.svc.cluster.local
 
 ---
 apiVersion: v1

@@ -1,157 +1,157 @@
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysql-credentials
-  namespace: data-analys
-type: Opaque
-stringData:
-  MYSQL_ROOT_PASSWORD: change-me-root
-  MYSQL_DATABASE: appdb
-  MYSQL_USER: appuser
-  MYSQL_PASSWORD: change-me-user
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mysql-credentials
+#   namespace: data-analys
+# type: Opaque
+# stringData:
+#   MYSQL_ROOT_PASSWORD: change-me-root
+#   MYSQL_DATABASE: appdb
+#   MYSQL_USER: appuser
+#   MYSQL_PASSWORD: change-me-user
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-data
-  namespace: data-analys
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 20Gi
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: mysql-data
+#   namespace: data-analys
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 20Gi
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mysql
-  namespace: data-analys
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mysql
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      containers:
-        - name: mysql
-          image: mysql:8.0
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 3306
-              name: mysql
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: MYSQL_ROOT_PASSWORD
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: MYSQL_DATABASE
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: MYSQL_USER
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: MYSQL_PASSWORD
-          volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-data
-          persistentVolumeClaim:
-            claimName: mysql-data
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: mysql
+#   namespace: data-analys
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: mysql
+#   template:
+#     metadata:
+#       labels:
+#         app: mysql
+#     spec:
+#       containers:
+#         - name: mysql
+#           image: mysql:8.0
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#             - containerPort: 3306
+#               name: mysql
+#           env:
+#             - name: MYSQL_ROOT_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mysql-credentials
+#                   key: MYSQL_ROOT_PASSWORD
+#             - name: MYSQL_DATABASE
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mysql-credentials
+#                   key: MYSQL_DATABASE
+#             - name: MYSQL_USER
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mysql-credentials
+#                   key: MYSQL_USER
+#             - name: MYSQL_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mysql-credentials
+#                   key: MYSQL_PASSWORD
+#           volumeMounts:
+#             - name: mysql-data
+#               mountPath: /var/lib/mysql
+#       volumes:
+#         - name: mysql-data
+#           persistentVolumeClaim:
+#             claimName: mysql-data
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-  namespace: data-analys
-spec:
-  selector:
-    app: mysql
-  ports:
-    - name: mysql
-      port: 3306
-      targetPort: 3306
-  type: ClusterIP
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mysql
+#   namespace: data-analys
+# spec:
+#   selector:
+#     app: mysql
+#   ports:
+#     - name: mysql
+#       port: 3306
+#       targetPort: 3306
+#   type: ClusterIP
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: phpmyadmin
-  namespace: data-analys
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: phpmyadmin
-  template:
-    metadata:
-      labels:
-        app: phpmyadmin
-    spec:
-      containers:
-        - name: phpmyadmin
-          image: phpmyadmin:5.2
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 80
-              name: http
-          env:
-            - name: PMA_HOST
-              value: mysql
-            - name: PMA_PORT
-              value: "3306"
-            - name: PMA_ARBITRARY
-              value: "0"
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: phpmyadmin
+#   namespace: data-analys
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: phpmyadmin
+#   template:
+#     metadata:
+#       labels:
+#         app: phpmyadmin
+#     spec:
+#       containers:
+#         - name: phpmyadmin
+#           image: phpmyadmin:5.2
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#             - containerPort: 80
+#               name: http
+#           env:
+#             - name: PMA_HOST
+#               value: mysql
+#             - name: PMA_PORT
+#               value: "3306"
+#             - name: PMA_ARBITRARY
+#               value: "0"
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: phpmyadmin
-  namespace: data-analys
-spec:
-  selector:
-    app: phpmyadmin
-  ports:
-    - name: http
-      port: 80
-      targetPort: 80
-  type: ClusterIP
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: phpmyadmin
+#   namespace: data-analys
+# spec:
+#   selector:
+#     app: phpmyadmin
+#   ports:
+#     - name: http
+#       port: 80
+#       targetPort: 80
+#   type: ClusterIP
 
----
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: phpmyadmin
-  namespace: data-analys
-spec:
-  host: phpmyadmin.apps.okd.pro.perelohome.com
-  to:
-    kind: Service
-    name: phpmyadmin
-    weight: 100
-  port:
-    targetPort: http
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
-  wildcardPolicy: None
+# ---
+# apiVersion: route.openshift.io/v1
+# kind: Route
+# metadata:
+#   name: phpmyadmin
+#   namespace: data-analys
+# spec:
+#   host: phpmyadmin.apps.okd.pro.perelohome.com
+#   to:
+#     kind: Service
+#     name: phpmyadmin
+#     weight: 100
+#   port:
+#     targetPort: http
+#   tls:
+#     termination: edge
+#     insecureEdgeTerminationPolicy: Redirect
+#   wildcardPolicy: None

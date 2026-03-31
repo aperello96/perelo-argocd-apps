@@ -1,4 +1,19 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: metabase-secrets
+  namespace: data-analys
+type: Opaque
+stringData:
+  MB_DB_TYPE: mysql
+  MB_DB_DBNAME: metabase
+  MB_DB_PORT: "3306"
+  MB_DB_USER: metabase
+  MB_DB_PASS: change-me-metabase-db-pass
+  MB_DB_HOST: mysql
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,25 +30,56 @@ spec:
         app: metabase
     spec:
       containers:
-        - name: metabase
+        - name: metabase-app
           image: metabase/metabase:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
               name: http
+          env:
+            - name: MB_DB_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-secrets
+                  key: MB_DB_TYPE
+            - name: MB_DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-secrets
+                  key: MB_DB_DBNAME
+            - name: MB_DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-secrets
+                  key: MB_DB_PORT
+            - name: MB_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-secrets
+                  key: MB_DB_USER
+            - name: MB_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-secrets
+                  key: MB_DB_PASS
+            - name: MB_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-secrets
+                  key: MB_DB_HOST
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: metabase
+  name: metabase-service
   namespace: data-analys
 spec:
   selector:
     app: metabase
   ports:
-    - name: http
-      port: 3000
+    - name: http-web
+      port: 80
       targetPort: 3000
   type: ClusterIP
 
@@ -47,10 +93,10 @@ spec:
   host: metabase.apps.okd.pro.perelohome.com
   to:
     kind: Service
-    name: metabase
+    name: metabase-service
     weight: 100
   port:
-    targetPort: http
+    targetPort: http-web
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect

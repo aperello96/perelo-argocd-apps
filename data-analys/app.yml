@@ -4,31 +4,6 @@ kind: Namespace
 metadata:
   name: data-analys
 
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: data-analys-anyuid
-  namespace: data-analys
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:openshift:scc:anyuid
-subjects:
-  - kind: ServiceAccount
-    name: default
-    namespace: data-analys
-  - kind: ServiceAccount
-    name: airbyte-admin
-    namespace: data-analys
-  - kind: ServiceAccount
-    name: airbyte-airbyte
-    namespace: data-analys
-  - kind: ServiceAccount
-    name: airbyte
-    namespace: data-analys
-
----
 apiVersion: v1
 kind: Secret
 metadata:
@@ -287,12 +262,12 @@ spec:
 
         minio:
           enabled: true
-        syncPolicy:
-          automated:
-            prune: true
-            selfHeal: true
-          syncOptions:
-            - CreateNamespace=true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 
 ---
 apiVersion: route.openshift.io/v1

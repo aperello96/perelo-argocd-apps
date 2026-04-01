@@ -14,7 +14,7 @@ spec:
   data:
     - secretKey: MONGODB_URI
       remoteRef:
-        key: tripted/pro/env
+        key: apps/data-analys/mongo-etl
         property: MONGODB_URI
     - secretKey: MONGODB_DATABASE
       remoteRef:

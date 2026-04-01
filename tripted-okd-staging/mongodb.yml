@@ -23,12 +23,17 @@ spec:
     - horizon: db-node-3.local.perelohome.com:31019
   security:
     tls:
-      enabled: false
+      enabled: true
+      certificateKeySecretRef:
+        name: mongodb-server-tls
+      caConfigMapRef:
+        name: mongodb-ca
     authentication:
       modes:
         - SCRAM
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
+    net.tls.mode: requireTLS
   statefulSet:
     spec:
       template:

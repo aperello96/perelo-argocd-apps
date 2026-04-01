@@ -1,0 +1,99 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: mongo-etl-env
+  namespace: data-analys
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: mongo-etl-env
+    creationPolicy: Owner
+  data:
+    - secretKey: MONGODB_URI
+      remoteRef:
+        key: tripted/pro/env
+        property: MONGODB_URI
+    - secretKey: MONGODB_DATABASE
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: MONGODB_DATABASE
+    - secretKey: GCP_PROJECT_ID
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: GCP_PROJECT_ID
+    - secretKey: BQ_DATASET
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: BQ_DATASET
+    - secretKey: BQ_LOCATION
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: BQ_LOCATION
+    - secretKey: COLLECTIONS
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: COLLECTIONS
+    - secretKey: DRY_RUN
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: DRY_RUN
+    - secretKey: MONGO_BATCH_SIZE
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: MONGO_BATCH_SIZE
+    - secretKey: WRITE_DISPOSITION
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: WRITE_DISPOSITION
+    - secretKey: GCP_SERVICE_ACCOUNT_JSON
+      remoteRef:
+        key: apps/data-analys/mongo-etl
+        property: GCP_SERVICE_ACCOUNT_JSON
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongo-etl
+  namespace: data-analys
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: mongo-etl
+              image: tripted/tripted-etl:v0.1.0
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: GOOGLE_APPLICATION_CREDENTIALS
+                  value: /var/secrets/google/key.json
+              envFrom:
+                - secretRef:
+                    name: mongo-etl-env
+              volumeMounts:
+                - name: gcp-sa-key
+                  mountPath: /var/secrets/google
+                  readOnly: true
+              resources:
+                requests:
+                  cpu: "200m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "1"
+                  memory: "1Gi"
+          volumes:
+            - name: gcp-sa-key
+              secret:
+                secretName: mongo-etl-env
+                items:
+                  - key: GCP_SERVICE_ACCOUNT_JSON
+                    path: key.json

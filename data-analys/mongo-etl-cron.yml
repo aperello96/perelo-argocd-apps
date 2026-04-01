@@ -71,7 +71,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: mongo-etl
-              image: tripted/tripted-etl:v0.1.0
+              image: tripted/tripted-etl:v1.0.0
               imagePullPolicy: IfNotPresent
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS

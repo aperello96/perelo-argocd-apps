@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: n8n
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: n8n
+  source:
+    repoURL: 8gears.container-registry.com/library
+    chart: n8n
+    targetRevision: "2.0.1"
+    helm:
+      releaseName: n8n
+      values: |
+        ingress:
+          enabled: true
+          hosts:
+            - host: n8n-pro.apps.okd.pro.perelohome.com
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - n8n-pro.apps.okd.pro.perelohome.com
+              secretName: n8n-server-tls-secret
+
+        main:
+          config:
+            n8n:
+              host: n8n-pro.apps.okd.pro.perelohome.com
+              protocol: https
+              editor_base_url: https://n8n-pro.apps.okd.pro.perelohome.com
+              webhook_url: https://n8n-pro.apps.okd.pro.perelohome.com/
+            generic:
+              timezone: Europe/Madrid
+          service:
+            type: ClusterIP
+            port: 5678
+          persistence:
+            enabled: true
+            type: dynamic
+            storageClass: rook-ceph-block
+            size: 10Gi
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

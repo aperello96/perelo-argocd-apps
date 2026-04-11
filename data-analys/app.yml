@@ -56,6 +56,18 @@ spec:
 
         minio:
           enabled: true
+
+        workloads:
+          resources:
+            # Force replication jobs to use low resources instead of connector defaults.
+            useConnectorResourceDefaults: false
+            replication:
+              cpu:
+                request: "250m"
+                limit: "500m"
+              memory:
+                request: "1Gi"
+                limit: "1Gi"
   syncPolicy:
     automated:
       prune: true

@@ -27,20 +27,15 @@ spec:
           airbyteUrl: https://airbyte.apps.okd.pro.perelohome.com
           auth:
             enabled: false
-          env_vars:
+          jobs:
             # Temporary lower resource requests to improve scheduling in constrained clusters.
-            JOB_MAIN_CONTAINER_CPU_REQUEST: "500m"
-            JOB_MAIN_CONTAINER_CPU_LIMIT: "1"
-            JOB_MAIN_CONTAINER_MEMORY_REQUEST: "1Gi"
-            JOB_MAIN_CONTAINER_MEMORY_LIMIT: "1Gi"
-            SIDECAR_KUBE_CPU_REQUEST: "250m"
-            SIDECAR_KUBE_CPU_LIMIT: "500m"
-            SIDECAR_KUBE_MEMORY_REQUEST: "1Gi"
-            SIDECAR_KUBE_MEMORY_LIMIT: "1Gi"
-            JOB_KUBE_INIT_CONTAINER_CPU_REQUEST: "500m"
-            JOB_KUBE_INIT_CONTAINER_CPU_LIMIT: "1"
-            JOB_KUBE_INIT_CONTAINER_MEMORY_REQUEST: "1Gi"
-            JOB_KUBE_INIT_CONTAINER_MEMORY_LIMIT: "1Gi"
+            resources:
+              requests:
+                cpu: "500m"
+                memory: "1Gi"
+              limits:
+                cpu: "1"
+                memory: "1Gi"
 
         ingress:
           enabled: false
